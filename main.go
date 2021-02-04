@@ -4,7 +4,12 @@ import (
 	"dwarf/api/routers"
 	"log"
 	"net/http"
+
+	"dwarf/api/helpers.go"
 )
+
+//Connection mongoDB with helper class
+var collection = helpers.ConnectDB()
 
 func main() {
 
