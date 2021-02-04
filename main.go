@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"dwarf/api/helpers.go"
+	"dwarf/api/helpers"
 )
 
 //Connection mongoDB with helper class
