@@ -4,6 +4,8 @@ import (
 	"dwarf/api/routers"
 	"log"
 	"net/http"
+
+	"dwarf/configs"
 )
 
 func main() {
@@ -16,12 +18,16 @@ func main() {
 		}
 	}()
 
+	serverConfig := configs.ServerConfig{}
+	configs.Initialize(&serverConfig)
+
 	mux := routers.RouterHandler()
 
 	server := http.Server{
-		Addr:    ":8080",
+		Addr:    ":" + serverConfig.PORT,
 		Handler: mux,
 	}
 
+	log.Println("server started")
 	panic(server.ListenAndServe())
 }
