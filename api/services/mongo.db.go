@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"dwarf/configs"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -14,9 +15,13 @@ var DBConnection *mongo.Client
 // DB mongo database
 var DB *mongo.Database
 
-// MongoConnect creates the new client
-func MongoConnect(c context.Context, db string) error {
-	uri := "mongodb://localhost:27017"
+// MongoConnect
+func MongoConnect(c context.Context) error {
+
+	var mongoConfig configs.DBConfig
+	configs.Initialize(&mongoConfig)
+
+	uri := "mongodb://" + mongoConfig.MongoHost + ":" + mongoConfig.MongoPort
 	ctx, cancel := context.WithTimeout(c, 100*time.Second)
 	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
@@ -24,11 +29,11 @@ func MongoConnect(c context.Context, db string) error {
 		return err
 	}
 	DBConnection = client
-	DB = client.Database(db)
+	DB = client.Database(mongoConfig.MongoDbName)
 	return nil
 }
 
-// MongoConnectionHealth connection health check
+// MongoConnectionHealth
 func MongoConnectionHealth(c context.Context) error {
 	ctx, cancel := context.WithTimeout(c, 2*time.Second)
 	defer cancel()
@@ -38,13 +43,14 @@ func MongoConnectionHealth(c context.Context) error {
 	return nil
 }
 
-// Collection defines the name of the constructor
+// Collection
 type Collection struct {
 	collection *mongo.Collection
 }
 
-// FindOne - return a single document
-func (c Collection) FindOne(ctx context.Context, filter interface{}, opt *options.FindOneOptions) (*mongo.SingleResult, error) {
+// Find - return a single document
+func (c Collection) FindOne(ctx context.Context, filter interface{},
+	opt *options.FindOneOptions) (*mongo.SingleResult, error) {
 	result := c.collection.FindOne(ctx, filter, opt)
 	if err := result.Err(); err != nil {
 		return nil, err
@@ -53,7 +59,8 @@ func (c Collection) FindOne(ctx context.Context, filter interface{}, opt *option
 }
 
 // Find - returns an array of document
-func (c Collection) Find(ctx context.Context, filter interface{}, opt *options.FindOptions) (*mongo.Cursor, error) {
+func (c Collection) Find(ctx context.Context, filter interface{},
+	opt *options.FindOptions) (*mongo.Cursor, error) {
 	result, err := c.collection.Find(ctx, filter, opt)
 	if err != nil {
 		return nil, err
@@ -62,16 +69,17 @@ func (c Collection) Find(ctx context.Context, filter interface{}, opt *options.F
 }
 
 // UpdateByID - update and returns the updated document
-func (c Collection) UpdateByID(ctx context.Context, id interface{}, opt *options.UpdateOptions) (*mongo.UpdateResult, error) {
-	result, err := c.collection.UpdateByID(ctx, id, opt)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
+// func (c Collection) UpdateByID(ctx context.Context, id interface{}, opt *options.UpdateOptions) (*mongo.UpdateResult, error) {
+// 	result, err := c.collection.UpdateOne(ctx, id, opt)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return result, nil
+// }
 
 // Update - update and returns the updated documents
-func (c Collection) Update(ctx context.Context, filter interface{}, update interface{}, opt *options.UpdateOptions) (*mongo.UpdateResult, error) {
+func (c Collection) Update(ctx context.Context, filter interface{},
+	update interface{}, opt *options.UpdateOptions) (*mongo.UpdateResult, error) {
 	result, err := c.collection.UpdateMany(ctx, filter, update, opt)
 	if err != nil {
 		return nil, err

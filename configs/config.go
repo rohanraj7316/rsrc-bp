@@ -34,7 +34,7 @@ func setValue(f reflect.Value, value string) {
 	}
 }
 
-func getFromEnvVariables(config interface{}) {
+func getFromEnvVariables(config interface{}) (interface{}, error) {
 	typ := reflect.TypeOf(config)
 
 	// handle pointer here
@@ -55,15 +55,16 @@ func getFromEnvVariables(config interface{}) {
 			}
 		}
 	}
+	return nil, nil
 }
 
 // Initialize - loading and returning the config.
-func Initialize(config interface{}) {
+func Initialize(config interface{}) error {
 
 	configValue := reflect.ValueOf(config)
 	if typ := configValue.Type(); typ.Kind() != reflect.Struct {
 		// TODO: throw a error
 	}
-
 	getFromEnvVariables(config)
+	return nil
 }

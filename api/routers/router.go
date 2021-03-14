@@ -11,6 +11,7 @@ import (
 func RouterHandler() *chi.Mux {
 	r := chi.NewRouter()
 	r.Route("/", Health)
+	r.Route("/url-shortener", URLData)
 	return r
 }
 
