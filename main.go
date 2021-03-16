@@ -1,12 +1,20 @@
 package main
 
 import (
+	"context"
 	"dwarf/api/routers"
+	"dwarf/api/services"
 	"log"
+	"math/rand"
 	"net/http"
+	"time"
 
 	"dwarf/configs"
 )
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 func main() {
 
@@ -18,16 +26,23 @@ func main() {
 		}
 	}()
 
+	c := context.Background()
+
+	services.MongoConnect(c)
+
 	serverConfig := configs.ServerConfig{}
-	configs.Initialize(&serverConfig)
+	err := configs.Initialize(&serverConfig)
+	if err != nil {
+
+	}
 
 	mux := routers.RouterHandler()
 
 	server := http.Server{
-		Addr:    ":" + serverConfig.PORT,
+		Addr:    ":" + serverConfig.Port,
 		Handler: mux,
 	}
 
-	log.Println("server started")
+	log.Println("server started successfully")
 	panic(server.ListenAndServe())
 }

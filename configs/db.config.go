@@ -2,11 +2,14 @@ package configs
 
 // DBConfig config
 type DBConfig struct {
-	host string
-	port string
+	MongoDbName              string
+	MongoHost                string
+	MongoPort                string
+	MongoUsername            string
+	MongoPassword            string
+	MongoReplicate           string
+	MongoReadPreference      string
+	MongoPemPath             string
+	MongoServerIdentityCheck string
+	IsMongoCredentials       bool
 }
-
-// GetConfig {DBConfig} -
-// func (d DBConfig) GetConfig() (interface{}, error) {
-
-// }
