@@ -51,3 +51,19 @@ func GetCollection(c context.Context, n string) (*mongo.Collection, error) {
 	}
 	return DB.Collection(n), nil
 }
+
+// AddIndexing - used to add index for perticular fields
+func AddIndexing(c context.Context, coll string, indexKey interface{}) error {
+
+	collection, err := GetCollection(c, coll)
+	if err != nil {
+		return err
+	}
+
+	_, err = collection.Indexes().CreateOne(c, mongo.IndexModel{Keys: indexKey})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
