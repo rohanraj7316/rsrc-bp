@@ -3,7 +3,7 @@ package schemas
 import "time"
 
 // URLDataCollectionName collection name
-const URLDataCollectionName = "URLData"
+const URLDataCollectionName = "urlData"
 
 // URLData mongo schema
 type URLData struct {

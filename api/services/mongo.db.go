@@ -15,7 +15,7 @@ var DBConnection *mongo.Client
 // DB mongo database
 var DB *mongo.Database
 
-// MongoConnect
+// MongoConnect establish connection between application and mongo
 func MongoConnect(c context.Context) error {
 
 	var mongoConfig configs.DBConfig
@@ -43,46 +43,11 @@ func MongoConnectionHealth(c context.Context) error {
 	return nil
 }
 
-// Collection
-type Collection struct {
-	collection *mongo.Collection
-}
-
-// Find - return a single document
-func (c Collection) FindOne(ctx context.Context, filter interface{},
-	opt *options.FindOneOptions) (*mongo.SingleResult, error) {
-	result := c.collection.FindOne(ctx, filter, opt)
-	if err := result.Err(); err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// Find - returns an array of document
-func (c Collection) Find(ctx context.Context, filter interface{},
-	opt *options.FindOptions) (*mongo.Cursor, error) {
-	result, err := c.collection.Find(ctx, filter, opt)
+// GetCollection - return pts to the collection
+func GetCollection(c context.Context, n string) (*mongo.Collection, error) {
+	err := MongoConnectionHealth(c)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
-}
-
-// UpdateByID - update and returns the updated document
-// func (c Collection) UpdateByID(ctx context.Context, id interface{}, opt *options.UpdateOptions) (*mongo.UpdateResult, error) {
-// 	result, err := c.collection.UpdateOne(ctx, id, opt)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return result, nil
-// }
-
-// Update - update and returns the updated documents
-func (c Collection) Update(ctx context.Context, filter interface{},
-	update interface{}, opt *options.UpdateOptions) (*mongo.UpdateResult, error) {
-	result, err := c.collection.UpdateMany(ctx, filter, update, opt)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
+	return DB.Collection(n), nil
 }
