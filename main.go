@@ -30,7 +30,7 @@ func main() {
 
 	services.MongoConnect(c)
 
-	serverConfig := configs.ServerConfig{}
+	var serverConfig = configs.ServerConfigStruct{}
 	err := configs.Initialize(&serverConfig)
 	if err != nil {
 

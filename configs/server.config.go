@@ -1,10 +1,14 @@
 package configs
 
-// ServerConfig - server config.
-type ServerConfig struct {
+// ServerConfig config.
+type ServerConfigStruct struct {
 	Port               string
 	BodyLimit          string
 	AllowCorsOrigin    string
 	AllowCorsMethods   string
 	DisableMaintenance string
+	ProductName        string
+	ModuleName         string
 }
+
+var ServerConfig ServerConfigStruct

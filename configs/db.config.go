@@ -1,7 +1,7 @@
 package configs
 
-// DBConfig config
-type DBConfig struct {
+// DBConfig config.
+type DBConfigStruct struct {
 	MongoDbName              string
 	MongoHost                string
 	MongoPort                string
@@ -13,3 +13,5 @@ type DBConfig struct {
 	MongoServerIdentityCheck string
 	IsMongoCredentials       bool
 }
+
+var DBConfig DBConfigStruct

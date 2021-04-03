@@ -83,6 +83,22 @@ func FindURLByID(c context.Context, id string) (interface{}, error) {
 	return result, nil
 }
 
+// Find - find url data from url hash
+func Find(c context.Context, filter interface{}) (map[string]interface{}, error) {
+	collection, err := services.GetCollection(c, schemas.URLDataCollectionName)
+	if err != nil {
+		return nil, err
+	}
+
+	var result bson.M
+
+	err = collection.FindOne(c, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 // UpdateURLByID - update url data from hash id
 func UpdateURLByID(c context.Context, id string, rBody map[string]interface{}) (interface{}, error) {
 

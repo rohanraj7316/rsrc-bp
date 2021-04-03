@@ -18,18 +18,27 @@ var DB *mongo.Database
 // MongoConnect establish connection between application and mongo
 func MongoConnect(c context.Context) error {
 
-	var mongoConfig configs.DBConfig
+	var mongoConfig configs.DBConfigStruct
 	configs.Initialize(&mongoConfig)
 
-	uri := "mongodb://" + mongoConfig.MongoHost + ":" + mongoConfig.MongoPort
+	var uri string
+	if mongoConfig.IsMongoCredentials {
+		uri = "mongodb://" + mongoConfig.MongoUsername + ":" + mongoConfig.MongoPassword + "@" + mongoConfig.MongoHost + ":" + mongoConfig.MongoPort
+	} else {
+		uri = "mongodb://" + mongoConfig.MongoHost + ":" + mongoConfig.MongoPort
+	}
+
 	ctx, cancel := context.WithTimeout(c, 100*time.Second)
 	defer cancel()
+
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
 		return err
 	}
+
 	DBConnection = client
 	DB = client.Database(mongoConfig.MongoDbName)
+
 	return nil
 }
 

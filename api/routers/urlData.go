@@ -7,7 +7,10 @@ import (
 )
 
 func URLData(r chi.Router) {
-	r.Post("/", h(handlers.CreateURL))
 	r.Get("/{id}", h(handlers.FindURLByID))
+	r.Get("/health", h(handlers.GetHealth))
+
+	r.Post("/", h(handlers.CreateURL))
+
 	r.Patch("/{id}", h(handlers.UpdateURLByID))
 }
