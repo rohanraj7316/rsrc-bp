@@ -1,9 +1,8 @@
 package constants
 
-var ModuleName = "MONGO"
-
 // MongoErrors - list of all the errors related to mongo db.
 var MongoErrors = map[string]interface{}{
+	"ModuleName": "MONGO",
 	"DocumentNotFound": map[string]interface{}{
 		"statusCode": 404,
 		"message":    "unable to find document",

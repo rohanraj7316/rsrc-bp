@@ -12,8 +12,15 @@ import (
 	"dwarf/configs"
 )
 
+var serverConfig configs.ServerConfigStruct
+
 func init() {
 	rand.Seed(time.Now().UnixNano())
+
+	err := configs.Initialize(&serverConfig)
+	if err != nil {
+		log.Panicln(err)
+	}
 }
 
 func main() {
@@ -29,12 +36,6 @@ func main() {
 	c := context.Background()
 
 	services.MongoConnect(c)
-
-	var serverConfig = configs.ServerConfigStruct{}
-	err := configs.Initialize(&serverConfig)
-	if err != nil {
-
-	}
 
 	mux := routers.RouterHandler()
 
