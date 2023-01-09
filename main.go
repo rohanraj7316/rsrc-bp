@@ -58,13 +58,7 @@ func main() {
 	app.Use(middleware.New(app))
 
 	// initialize router
-	r, err := routes.NewRouteHandler(app, config)
-	if err != nil {
-		logger.Error(err.Error())
-		cancel()
-	}
-
-	r.NewRouter(app)
+	routes.New(app)
 
 	logger.Info("successful starting server :)")
 
