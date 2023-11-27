@@ -6,7 +6,7 @@ import (
 	"github.com/rohanraj7316/rsrc-bp-testing/configs"
 )
 
-func Router(a fiber.Router) {
+func NewRouter(a fiber.Router) {
 	// load the configs
 	cfg, err := configs.NewServerConfig()
 	if err != nil {
