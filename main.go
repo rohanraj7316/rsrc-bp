@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"math/rand"
 	"os"
 	"os/signal"
 	"syscall"
@@ -19,10 +18,6 @@ import (
 	"github.com/rohanraj7316/logger"
 	"github.com/rohanraj7316/middleware"
 )
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
 
 func main() {
 	// can be used to terminate the server using done
@@ -49,12 +44,6 @@ func main() {
 	app.Use(helmet.New())
 
 	// initializing middleware
-	/*
-		used to turn off the request logging
-		middleware.ConfigDefault.SetReqResLog(false)
-		used to turn off request & response body logging
-		middleware.ConfigDefault.SetReqResBodyLog(false)
-	*/
 	app.Use(middleware.New(app))
 
 	// initialize router
@@ -90,7 +79,6 @@ bLoop:
 		}
 	}
 
-	// TODO: add logics for service shutdown.
 	err = app.Shutdown()
 	if err != nil {
 		logger.Error(err.Error())
