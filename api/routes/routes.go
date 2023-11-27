@@ -6,7 +6,7 @@ import (
 
 	"github.com/rohanraj7316/middleware/libs/response"
 	"github.com/rohanraj7316/rsrc-bp-testing/api/resources/health"
-	"github.com/rohanraj7316/rsrc-bp-testing/api/resources/version"
+	"github.com/rohanraj7316/rsrc-bp-testing/api/resources/shorturl"
 	"github.com/rohanraj7316/rsrc-bp-testing/configs"
 
 	"github.com/gofiber/fiber/v2"
@@ -36,11 +36,11 @@ func (r *RouteHandler) NewRouter(app *fiber.App) {
 	routes := []Route{
 		{
 			path:   "/health",
-			router: health.Router,
+			router: health.NewRouter,
 		},
 		{
-			path:   "/version",
-			router: version.Router,
+			path:   "/",
+			router: shorturl.NewRouter,
 		},
 	}
 
@@ -50,6 +50,6 @@ func (r *RouteHandler) NewRouter(app *fiber.App) {
 
 	app.Use("*", func(c *fiber.Ctx) error {
 		msg := fmt.Sprintf("Cannot %s %s", c.Method(), c.Path()) // Cannot GET /healths
-		return response.NewBody(c, http.StatusInternalServerError, msg, nil, nil)
+		return response.NewBody(c, http.StatusBadRequest, msg, nil, nil)
 	})
 }
